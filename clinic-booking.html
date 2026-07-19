@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4CAF50">
+    <title>תור מרפאת ילדים - ליברמת אפעל</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #4CAF50;
+            padding-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .month-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .month-selector button {
+            background: #f0f0f0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .month-selector button:active {
+            background: #e0e0e0;
+        }
+
+        .month-selector button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .current-month {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .day-header {
+            text-align: center;
+            font-weight: bold;
+            color: #666;
+            font-size: 12px;
+            padding: 8px 0;
+        }
+
+        .day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            background: #f9f9f9;
+            position: relative;
+        }
+
+        .day.other-month {
+            color: #ccc;
+            cursor: default;
+        }
+
+        .day.past {
+            background: #e0e0e0;
+            color: #999;
+            cursor: default;
+        }
+
+        .day.available {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #4CAF50;
+        }
+
+        .day.available:active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .day.selected {
+            background: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+
+        .day.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 12px;
+        }
+
+        .slots-container {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .slots-container.active {
+            display: block;
+        }
+
+        .slots-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #333;
+            text-align: center;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .time-slot {
+            padding: 12px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+            transition: all 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .time-slot:active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .time-slot.selected {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .confirmation {
+            display: none;
+            background: #f0f8f0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .confirmation.active {
+            display: block;
+        }
+
+        .confirmation-text {
+            font-size: 14px;
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+
+        .booking-details {
+            background: #fff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-confirm {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-confirm:active {
+            background: #388e3c;
+            transform: scale(0.98);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:active {
+            background: #e0e0e0;
+            transform: scale(0.98);
+        }
+
+        .info-text {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 15px;
+            line-height: 1.4;
+        }
+
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: max(10px, env(safe-area-inset-left));
+                padding-right: max(10px, env(safe-area-inset-right));
+                padding-bottom: max(10px, env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏥 מרפאת ילדים</h1>
+            <p class="subtitle">ליברמת אפעל - זימון תור</p>
+        </header>
+
+        <div class="month-selector">
+            <button id="prevBtn" onclick="previousMonth()">◀ הקודם</button>
+            <div class="current-month" id="currentMonth"></div>
+            <button id="nextBtn" onclick="nextMonth()">הבא ▶</button>
+        </div>
+
+        <div class="calendar" id="calendar"></div>
+
+        <div class="slots-container" id="slotsContainer">
+            <div class="slots-title">בחר שעה (10 דקות)</div>
+            <div class="time-slots" id="timeSlots"></div>
+            
+            <div class="confirmation" id="confirmation">
+                <div class="confirmation-text">✓ התור שלך</div>
+                <div class="booking-details">
+                    <div id="selectedDate"></div>
+                    <div id="selectedTime"></div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-confirm" onclick="confirmBooking()">אישור התור</button>
+                    <button class="btn btn-reset" onclick="resetSelection()">בחר מחדש</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-text">
+            ⏰ שעות פעילות: 08:00 - 18:00<br>
+            📞 לביטול תור: התקשרו אלינו
+        </div>
+    </div>
+
+    <script>
+        const CLINIC_HOURS = {
+            start: 8,
+            end: 18,
+            slotDuration: 10
+        };
+
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTime = null;
+
+        function getDaysInMonth(date) {
+            return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        }
+
+        function getFirstDayOfMonth(date) {
+            return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        }
+
+        function formatHebrewMonth(date) {
+            const months = [
+                'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+                'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
+            ];
+            return `${months[date.getMonth()]} ${date.getFullYear()}`;
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.toDateString() === today.toDateString();
+        }
+
+        function isPast(date) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return date < today;
+        }
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const daysInMonth = getDaysInMonth(currentDate);
+            const firstDay = getFirstDayOfMonth(currentDate);
+
+            document.getElementById('currentMonth').textContent = formatHebrewMonth(currentDate);
+            document.getElementById('prevBtn').disabled = isPast(new Date(year, month, 1));
+
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+
+            // Day headers
+            const dayHeaders = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                dayHeader.textContent = day;
+                calendar.appendChild(dayHeader);
+            });
+
+            // Empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'day other-month';
+                calendar.appendChild(emptyDay);
+            }
+
+            // Day cells
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateObj = new Date(year, month, day);
+                const dayElement = document.createElement('div');
+                dayElement.className = 'day';
+                dayElement.textContent = day;
+
+                if (isPast(dateObj)) {
+                    dayElement.classList.add('past');
+                } else {
+                    dayElement.classList.add('available');
+                    dayElement.onclick = () => selectDate(dateObj);
+                }
+
+                if (selectedDate && selectedDate.toDateString() === dateObj.toDateString()) {
+                    dayElement.classList.add('selected');
+                }
+
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function generateTimeSlots() {
+            const slots = [];
+            for (let hour = CLINIC_HOURS.start; hour < CLINIC_HOURS.end; hour++) {
+                for (let minute = 0; minute < 60; minute += CLINIC_HOURS.slotDuration) {
+                    slots.push(`${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`);
+                }
+            }
+            return slots;
+        }
+
+        function renderTimeSlots() {
+            const slots = generateTimeSlots();
+            const slotsContainer = document.getElementById('timeSlots');
+            slotsContainer.innerHTML = '';
+
+            slots.forEach(slot => {
+                const slotButton = document.createElement('button');
+                slotButton.className = 'time-slot';
+                slotButton.textContent = slot;
+                slotButton.onclick = () => selectTime(slot, slotButton);
+
+                if (selectedTime === slot) {
+                    slotButton.classList.add('selected');
+                }
+
+                slotsContainer.appendChild(slotButton);
+            });
+        }
+
+        function selectDate(dateObj) {
+            selectedDate = dateObj;
+            selectedTime = null;
+            renderCalendar();
+            renderTimeSlots();
+            document.getElementById('slotsContainer').classList.add('active');
+            document.getElementById('confirmation').classList.remove('active');
+        }
+
+        function selectTime(time, element) {
+            selectedTime = time;
+            document.querySelectorAll('.time-slot').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            showConfirmation();
+        }
+
+        function showConfirmation() {
+            const hebrewDays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+            const dayName = hebrewDays[selectedDate.getDay()];
+            const dateStr = `${dayName}, ${selectedDate.getDate()}`;
+
+            document.getElementById('selectedDate').innerHTML = `📅 <strong>${dateStr}</strong>`;
+            document.getElementById('selectedTime').innerHTML = `🕐 <strong>${selectedTime}</strong>`;
+            document.getElementById('confirmation').classList.add('active');
+        }
+
+        function confirmBooking() {
+            const dateStr = selectedDate.toISOString().split('T')[0];
+            const message = `התור שלי:\n📅 ${dateStr}\n🕐 ${selectedTime}\n\nמרפאת ילדים - ליברמת אפעל`;
+            
+            // Save to localStorage
+            const booking = {
+                date: dateStr,
+                time: selectedTime,
+                confirmed: new Date().toISOString()
+            };
+            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+            bookings.push(booking);
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            alert(`✓ התור אושר!\n${message}\n\nיתכן וקצת יותר שם אתה בטלפון של סבא וסבתא`);
+            resetSelection();
+        }
+
+        function resetSelection() {
+            selectedDate = null;
+            selectedTime = null;
+            document.getElementById('slotsContainer').classList.remove('active');
+            document.getElementById('confirmation').classList.remove('active');
+            renderCalendar();
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        // Initialize
+        renderCalendar();
+        renderTimeSlots();
+    </script>
+</body>
+</html>
