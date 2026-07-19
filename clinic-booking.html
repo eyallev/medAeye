@@ -36,6 +36,40 @@
             overflow-y: auto;
         }
 
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-button.active {
+            color: #4CAF50;
+            border-bottom-color: #4CAF50;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         header {
             text-align: center;
             margin-bottom: 20px;
@@ -154,6 +188,33 @@
             font-size: 12px;
         }
 
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
         .slots-container {
             display: none;
             margin-top: 20px;
@@ -201,6 +262,13 @@
             color: white;
         }
 
+        .time-slot.booked {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #f44336;
+            cursor: not-allowed;
+        }
+
         .confirmation {
             display: none;
             background: #f0f8f0;
@@ -226,6 +294,8 @@
             border-radius: 6px;
             margin-bottom: 10px;
             font-weight: 500;
+            font-size: 13px;
+            line-height: 1.6;
         }
 
         .button-group {
@@ -265,12 +335,92 @@
             transform: scale(0.98);
         }
 
+        .btn-delete {
+            background: #f44336;
+            color: white;
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .btn-delete:active {
+            background: #d32f2f;
+        }
+
         .info-text {
             text-align: center;
             color: #666;
             font-size: 12px;
             margin-top: 15px;
             line-height: 1.4;
+        }
+
+        .bookings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .booking-card {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            border-right: 4px solid #4CAF50;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .booking-card.past {
+            opacity: 0.6;
+            border-right-color: #999;
+        }
+
+        .booking-card-header {
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .booking-card-info {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .booking-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
         }
 
         @supports (padding: max(0px)) {
@@ -289,34 +439,90 @@
             <p class="subtitle">ליברמת אפעל - זימון תור</p>
         </header>
 
-        <div class="month-selector">
-            <button id="prevBtn" onclick="previousMonth()">◀ הקודם</button>
-            <div class="current-month" id="currentMonth"></div>
-            <button id="nextBtn" onclick="nextMonth()">הבא ▶</button>
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('booking')">זימון תור</button>
+            <button class="tab-button" onclick="switchTab('bookings')">ניהול תורים</button>
         </div>
 
-        <div class="calendar" id="calendar"></div>
+        <!-- TAB 1: BOOKING -->
+        <div id="booking" class="tab-content active">
+            <div class="form-group">
+                <label>שם המטופל *</label>
+                <input type="text" id="patientName" placeholder="הכנס שם מלא">
+            </div>
 
-        <div class="slots-container" id="slotsContainer">
-            <div class="slots-title">בחר שעה (10 דקות)</div>
-            <div class="time-slots" id="timeSlots"></div>
-            
-            <div class="confirmation" id="confirmation">
-                <div class="confirmation-text">✓ התור שלך</div>
-                <div class="booking-details">
-                    <div id="selectedDate"></div>
-                    <div id="selectedTime"></div>
+            <div class="form-group">
+                <label>תעודת זהות *</label>
+                <input type="text" id="patientId" placeholder="הכנס ת.ז">
+            </div>
+
+            <div class="form-group">
+                <label>קופת חולים *</label>
+                <select id="insurance">
+                    <option value="">בחר קופת חולים</option>
+                    <option value="clalit">קופת חולים כללית</option>
+                    <option value="maccabi">מכבי</option>
+                    <option value="meuhedet">מאוחדת</option>
+                    <option value="leumit">לאומית</option>
+                    <option value="private">פרטית</option>
+                </select>
+            </div>
+
+            <div class="month-selector">
+                <button id="prevBtn" onclick="previousMonth()">◀ הקודם</button>
+                <div class="current-month" id="currentMonth"></div>
+                <button id="nextBtn" onclick="nextMonth()">הבא ▶</button>
+            </div>
+
+            <div class="calendar" id="calendar"></div>
+
+            <div class="slots-container" id="slotsContainer">
+                <div class="slots-title">בחר שעה (10 דקות)</div>
+                <div class="time-slots" id="timeSlots"></div>
+                
+                <div class="confirmation" id="confirmation">
+                    <div class="confirmation-text">✓ התור שלך</div>
+                    <div class="booking-details">
+                        <div id="selectedPatientName"></div>
+                        <div id="selectedPatientId"></div>
+                        <div id="selectedInsurance"></div>
+                        <div id="selectedDate"></div>
+                        <div id="selectedTime"></div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-confirm" onclick="confirmBooking()">אישור התור</button>
+                        <button class="btn btn-reset" onclick="resetSelection()">בחר מחדש</button>
+                    </div>
                 </div>
-                <div class="button-group">
-                    <button class="btn btn-confirm" onclick="confirmBooking()">אישור התור</button>
-                    <button class="btn btn-reset" onclick="resetSelection()">בחר מחדש</button>
-                </div>
+            </div>
+
+            <div class="info-text">
+                ⏰ שעות פעילות: 08:00 - 18:00<br>
+                📞 לביטול תור: התקשרו אלינו
             </div>
         </div>
 
-        <div class="info-text">
-            ⏰ שעות פעילות: 08:00 - 18:00<br>
-            📞 לביטול תור: התקשרו אלינו
+        <!-- TAB 2: BOOKINGS MANAGEMENT -->
+        <div id="bookings" class="tab-content">
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="totalBookings">0</div>
+                    <div class="stat-label">סך תורים</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="availableSlots">60</div>
+                    <div class="stat-label">זמנים פנויים</div>
+                </div>
+            </div>
+
+            <div class="bookings-list" id="bookingsList">
+                <div class="empty-message">אין תורים עדיין</div>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
+                <button class="btn btn-reset" onclick="exportData()" style="width: 100%; margin-bottom: 10px;">📥 ייצוא נתונים (JSON)</button>
+                <button class="btn btn-reset" onclick="clearAllData()" style="width: 100%; background: #ffebee; color: #f44336;">🗑️ מחק הכל</button>
+            </div>
         </div>
     </div>
 
@@ -330,6 +536,32 @@
         let currentDate = new Date();
         let selectedDate = null;
         let selectedTime = null;
+        let bookings = JSON.parse(localStorage.getItem('clinicBookings') || '[]');
+
+        // Initialize
+        function init() {
+            renderCalendar();
+            renderTimeSlots();
+            updateStats();
+        }
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'bookings') {
+                renderBookingsList();
+            }
+        }
 
         function getDaysInMonth(date) {
             return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -347,15 +579,15 @@
             return `${months[date.getMonth()]} ${date.getFullYear()}`;
         }
 
-        function isToday(date) {
-            const today = new Date();
-            return date.toDateString() === today.toDateString();
-        }
-
         function isPast(date) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             return date < today;
+        }
+
+        function isSlotBooked(date, time) {
+            const dateStr = date.toISOString().split('T')[0];
+            return bookings.some(b => b.date === dateStr && b.time === time);
         }
 
         function renderCalendar() {
@@ -379,7 +611,7 @@
                 calendar.appendChild(dayHeader);
             });
 
-            // Empty cells for days before month starts
+            // Empty cells
             for (let i = 0; i < firstDay; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.className = 'day other-month';
@@ -427,7 +659,13 @@
                 const slotButton = document.createElement('button');
                 slotButton.className = 'time-slot';
                 slotButton.textContent = slot;
-                slotButton.onclick = () => selectTime(slot, slotButton);
+
+                if (selectedDate && isSlotBooked(selectedDate, slot)) {
+                    slotButton.classList.add('booked');
+                    slotButton.disabled = true;
+                } else {
+                    slotButton.onclick = () => selectTime(slot, slotButton);
+                }
 
                 if (selectedTime === slot) {
                     slotButton.classList.add('selected');
@@ -437,7 +675,29 @@
             });
         }
 
+        function validateForm() {
+            const name = document.getElementById('patientName').value.trim();
+            const id = document.getElementById('patientId').value.trim();
+            const insurance = document.getElementById('insurance').value;
+
+            if (!name) {
+                alert('אנא הכנס שם מטופל');
+                return false;
+            }
+            if (!id) {
+                alert('אנא הכנס תעודת זהות');
+                return false;
+            }
+            if (!insurance) {
+                alert('אנא בחר קופת חולים');
+                return false;
+            }
+            return true;
+        }
+
         function selectDate(dateObj) {
+            if (!validateForm()) return;
+
             selectedDate = dateObj;
             selectedTime = null;
             renderCalendar();
@@ -457,36 +717,47 @@
             const hebrewDays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
             const dayName = hebrewDays[selectedDate.getDay()];
             const dateStr = `${dayName}, ${selectedDate.getDate()}`;
+            const name = document.getElementById('patientName').value;
+            const id = document.getElementById('patientId').value;
+            const insurance = document.getElementById('insurance').options[document.getElementById('insurance').selectedIndex].text;
 
+            document.getElementById('selectedPatientName').innerHTML = `👤 <strong>${name}</strong>`;
+            document.getElementById('selectedPatientId').innerHTML = `🆔 <strong>${id}</strong>`;
+            document.getElementById('selectedInsurance').innerHTML = `🏥 <strong>${insurance}</strong>`;
             document.getElementById('selectedDate').innerHTML = `📅 <strong>${dateStr}</strong>`;
             document.getElementById('selectedTime').innerHTML = `🕐 <strong>${selectedTime}</strong>`;
             document.getElementById('confirmation').classList.add('active');
         }
 
         function confirmBooking() {
-            const dateStr = selectedDate.toISOString().split('T')[0];
-            const message = `התור שלי:\n📅 ${dateStr}\n🕐 ${selectedTime}\n\nמרפאת ילדים - ליברמת אפעל`;
-            
-            // Save to localStorage
             const booking = {
-                date: dateStr,
+                id: Date.now(),
+                name: document.getElementById('patientName').value,
+                patientId: document.getElementById('patientId').value,
+                insurance: document.getElementById('insurance').options[document.getElementById('insurance').selectedIndex].text,
+                date: selectedDate.toISOString().split('T')[0],
                 time: selectedTime,
                 confirmed: new Date().toISOString()
             };
-            const bookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-            bookings.push(booking);
-            localStorage.setItem('bookings', JSON.stringify(bookings));
 
-            alert(`✓ התור אושר!\n${message}\n\nיתכן וקצת יותר שם אתה בטלפון של סבא וסבתא`);
+            bookings.push(booking);
+            localStorage.setItem('clinicBookings', JSON.stringify(bookings));
+
+            alert(`✓ התור אושר!\n\n${booking.name}\n${booking.date} בשעה ${booking.time}`);
             resetSelection();
+            updateStats();
         }
 
         function resetSelection() {
             selectedDate = null;
             selectedTime = null;
+            document.getElementById('patientName').value = '';
+            document.getElementById('patientId').value = '';
+            document.getElementById('insurance').value = '';
             document.getElementById('slotsContainer').classList.remove('active');
             document.getElementById('confirmation').classList.remove('active');
             renderCalendar();
+            renderTimeSlots();
         }
 
         function previousMonth() {
@@ -499,9 +770,88 @@
             renderCalendar();
         }
 
-        // Initialize
-        renderCalendar();
-        renderTimeSlots();
+        function renderBookingsList() {
+            const listContainer = document.getElementById('bookingsList');
+            const now = new Date();
+
+            if (bookings.length === 0) {
+                listContainer.innerHTML = '<div class="empty-message">אין תורים עדיין</div>';
+                return;
+            }
+
+            // Sort by date
+            const sorted = [...bookings].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            listContainer.innerHTML = sorted.map(booking => {
+                const bookingDate = new Date(booking.date + 'T00:00:00');
+                const isPastBooking = bookingDate < now;
+
+                return `
+                    <div class="booking-card ${isPastBooking ? 'past' : ''}">
+                        <div class="booking-card-header">${booking.name}</div>
+                        <div class="booking-card-info">
+                            🆔 ${booking.patientId}<br>
+                            🏥 ${booking.insurance}<br>
+                            📅 ${booking.date} בשעה ${booking.time}
+                        </div>
+                        <div class="booking-card-actions">
+                            <button class="btn btn-delete" onclick="deleteBooking(${booking.id})">מחק</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteBooking(id) {
+            if (confirm('האם אתה בטוח שברצונך למחוק את התור?')) {
+                bookings = bookings.filter(b => b.id !== id);
+                localStorage.setItem('clinicBookings', JSON.stringify(bookings));
+                renderBookingsList();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const totalBookings = bookings.length;
+            const slotsPerDay = generateTimeSlots().length;
+            const daysToCount = 30; // Count for next 30 days
+            const bookedSlots = bookings.length;
+            const availableSlots = (slotsPerDay * daysToCount) - bookedSlots;
+
+            document.getElementById('totalBookings').textContent = totalBookings;
+            document.getElementById('availableSlots').textContent = Math.max(0, availableSlots);
+        }
+
+        function exportData() {
+            if (bookings.length === 0) {
+                alert('אין נתונים לייצוא');
+                return;
+            }
+
+            const dataStr = JSON.stringify(bookings, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `clinic-bookings-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ האם אתה בטוח? פעולה זו תמחק את כל התורים!')) {
+                bookings = [];
+                localStorage.setItem('clinicBookings', JSON.stringify(bookings));
+                renderBookingsList();
+                updateStats();
+                alert('✓ כל הנתונים נמחקו');
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
