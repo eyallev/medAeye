@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#FF6B9D">
-    <title>טיפי דר אייל - מרפאת ילדים ברמת אפעל</title>
+    <title>טיפי - מרפאת ילדים ליברמת אפעל</title>
     <style>
         * {
             margin: 0;
@@ -69,6 +69,7 @@
             margin-bottom: 20px;
             border-bottom: 3px solid #FFE5EC;
             padding-bottom: 12px;
+            overflow-x: auto;
         }
 
         .tab-button {
@@ -77,12 +78,13 @@
             border: none;
             background: transparent;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: bold;
             color: #999;
             border-bottom: 4px solid transparent;
             transition: all 0.3s;
             border-radius: 8px 8px 0 0;
+            white-space: nowrap;
         }
 
         .tab-button.active {
@@ -131,6 +133,31 @@
 
         input::placeholder {
             color: #FFB3D9;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            background: none;
+            border: none;
+            color: #FF6B9D;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-field input {
+            padding-left: 40px;
         }
 
         .error {
@@ -386,6 +413,22 @@
             transform: scale(0.95);
         }
 
+        .btn-login {
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
+            width: 100%;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #558B2F;
+            width: 100%;
+            font-size: 13px;
+            padding: 10px;
+            margin-bottom: 16px;
+        }
+
         .info-text {
             text-align: center;
             color: #FF85C0;
@@ -469,22 +512,6 @@
             opacity: 0.9;
         }
 
-        .password-field {
-            position: relative;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #FF6B9D;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
         .lock-icon {
             color: #FF6B9D;
             margin-right: 8px;
@@ -505,6 +532,23 @@
             display: block;
         }
 
+        .login-box {
+            background: linear-gradient(135deg, #FFE5EC 0%, #E1BEE7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .user-profile {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            color: #558B2F;
+            font-weight: bold;
+            text-align: center;
+        }
+
         @supports (padding: max(0px)) {
             body {
                 padding-left: max(10px, env(safe-area-inset-left));
@@ -519,12 +563,13 @@
         <header>
             <div class="emoji-header">🧒👨‍⚕️</div>
             <h1>טִיפִי</h1>
-            <p class="subtitle">מרפאת ילדים ברמת אפעל</p>
+            <p class="subtitle">מרפאת ילדים ליברמת אפעל</p>
         </header>
 
         <div class="tabs">
             <button class="tab-button active" onclick="switchTab('booking')">🗓️ זימון</button>
-            <button class="tab-button" onclick="switchTab('bookings')">🔐 ניהול</button>
+            <button class="tab-button" onclick="switchTab('userAccount')">👤 האזור שלי</button>
+            <button class="tab-button" onclick="switchTab('admin')">🔐 ניהול</button>
         </div>
 
         <!-- TAB 1: BOOKING -->
@@ -539,6 +584,12 @@
                 <label>🆔 תעודת זהות *</label>
                 <input type="text" id="patientId" placeholder="הכנס 9 ספרות" maxlength="9" inputmode="numeric">
                 <div class="error" id="idError">ת.ז חייבת להיות 9 ספרות</div>
+            </div>
+
+            <div class="form-group">
+                <label>📱 מספר טלפון *</label>
+                <input type="tel" id="patientPhone" placeholder="הכנס מספר טלפון" maxlength="10" inputmode="tel">
+                <div class="error" id="phoneError">טלפון חובה (10 ספרות)</div>
             </div>
 
             <div class="form-group">
@@ -571,6 +622,7 @@
                     <div class="booking-details">
                         <div id="selectedPatientName"></div>
                         <div id="selectedPatientId"></div>
+                        <div id="selectedPatientPhone"></div>
                         <div id="selectedInsurance"></div>
                         <div id="selectedDate"></div>
                         <div id="selectedTime"></div>
@@ -583,17 +635,52 @@
             </div>
 
             <div class="info-text">
-                ⏰ שעות: 08:00 - 18:00 | ⏱️ כל תור: 10 דקות
+                ⏰ שעות: 08:00 - 18:00 | ⏱️ כל תור: 10 דקות<br>
+                💡 סיסמתך לאזור האישי: 1111
             </div>
         </div>
 
-        <!-- TAB 2: BOOKINGS MANAGEMENT -->
-        <div id="bookings" class="tab-content">
+        <!-- TAB 2: USER ACCOUNT -->
+        <div id="userAccount" class="tab-content">
+            <div class="login-box" id="loginBox">
+                <div class="form-group">
+                    <label>📱 מספר טלפון</label>
+                    <input type="tel" id="loginPhone" placeholder="הכנס מספר טלפון" maxlength="10" inputmode="tel">
+                    <div class="error" id="loginPhoneError">טלפון חובה</div>
+                </div>
+
+                <div class="form-group">
+                    <label><span class="lock-icon">🔐</span>סיסמה</label>
+                    <div class="password-field">
+                        <input type="password" id="loginPassword" placeholder="הכנס סיסמה">
+                        <button class="toggle-password" onclick="toggleUserPasswordVisibility()" type="button">👁️</button>
+                    </div>
+                    <div class="error" id="loginPasswordError">סיסמה שגויה</div>
+                </div>
+
+                <button class="btn btn-login" onclick="userLogin()">🔓 כניסה</button>
+                <div class="info-text" style="margin-top: 12px;">
+                    הסיסמה הזמנית שלך: <strong>1111</strong>
+                </div>
+            </div>
+
+            <div id="userContent" style="display: none;">
+                <button class="btn btn-logout" onclick="userLogout()">🔓 יציאה</button>
+                <div class="user-profile" id="userProfile"></div>
+
+                <div class="bookings-list" id="userBookingsList">
+                    <div class="empty-message">אין תורים עדיין</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: ADMIN -->
+        <div id="admin" class="tab-content">
             <div class="form-group" style="margin-bottom: 20px;">
                 <label><span class="lock-icon">🔐</span>סיסמת ניהול *</label>
                 <div class="password-field">
                     <input type="password" id="adminPassword" placeholder="הכנס סיסמה">
-                    <button class="toggle-password" onclick="togglePasswordVisibility()">👁️</button>
+                    <button class="toggle-password" onclick="toggleAdminPasswordVisibility()" type="button">👁️</button>
                 </div>
                 <div class="error" id="passwordError">סיסמה שגויה</div>
             </div>
@@ -632,11 +719,15 @@
         };
 
         const ADMIN_PASSWORD = '5588';
+        const USER_PASSWORD = '1111';
+
         let currentDate = new Date();
         let selectedDate = null;
         let selectedTime = null;
         let bookings = JSON.parse(localStorage.getItem('clinicBookings') || '[]');
         let adminAuthenticated = false;
+        let userAuthenticated = false;
+        let userPhone = null;
 
         // Initialize
         function init() {
@@ -644,15 +735,27 @@
             renderTimeSlots();
             updateStats();
             
-            // Validate ID input
             document.getElementById('patientId').addEventListener('input', function(e) {
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
 
-            // Admin password verification
+            document.getElementById('patientPhone').addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            document.getElementById('loginPhone').addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
             document.getElementById('adminPassword').addEventListener('keyup', function(e) {
                 if (e.key === 'Enter') {
                     checkAdminPassword();
+                }
+            });
+
+            document.getElementById('loginPassword').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    userLogin();
                 }
             });
         }
@@ -664,10 +767,28 @@
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
 
-            if (tabName === 'bookings') {
+            if (tabName === 'admin') {
                 document.getElementById('adminPassword').focus();
                 clearAdminView();
+            } else if (tabName === 'userAccount') {
+                if (userAuthenticated) {
+                    renderUserBookings();
+                } else {
+                    document.getElementById('loginPhone').focus();
+                }
             }
+        }
+
+        function toggleAdminPasswordVisibility() {
+            const pwd = document.getElementById('adminPassword');
+            const btn = event.target;
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        }
+
+        function toggleUserPasswordVisibility() {
+            const pwd = document.getElementById('loginPassword');
+            const btn = event.target;
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
         }
 
         function checkAdminPassword() {
@@ -678,7 +799,7 @@
                 adminAuthenticated = true;
                 passwordError.classList.remove('show');
                 document.getElementById('adminContent').style.display = 'block';
-                document.getElementById('adminPassword').style.display = 'none';
+                document.getElementById('adminPassword').parentElement.parentElement.style.display = 'none';
                 renderBookingsList();
                 updateStats();
             } else {
@@ -693,15 +814,92 @@
                 renderBookingsList();
             } else {
                 document.getElementById('adminContent').style.display = 'none';
-                document.getElementById('adminPassword').style.display = 'block';
+                document.getElementById('adminPassword').parentElement.parentElement.style.display = 'block';
                 document.getElementById('adminPassword').value = '';
                 document.getElementById('passwordError').classList.remove('show');
             }
         }
 
-        function togglePasswordVisibility() {
-            const pwd = document.getElementById('adminPassword');
-            pwd.type = pwd.type === 'password' ? 'text' : 'password';
+        function userLogin() {
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+            const phoneError = document.getElementById('loginPhoneError');
+            const passwordError = document.getElementById('loginPasswordError');
+
+            phoneError.classList.remove('show');
+            passwordError.classList.remove('show');
+
+            if (!phone || phone.length !== 10) {
+                phoneError.classList.add('show');
+                return;
+            }
+
+            if (password !== USER_PASSWORD) {
+                passwordError.classList.add('show');
+                return;
+            }
+
+            userAuthenticated = true;
+            userPhone = phone;
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('userContent').style.display = 'block';
+            
+            document.getElementById('userProfile').innerHTML = `📱 ${phone}<br>✅ כניסה בהצלחה`;
+            renderUserBookings();
+        }
+
+        function userLogout() {
+            userAuthenticated = false;
+            userPhone = null;
+            document.getElementById('loginBox').style.display = 'block';
+            document.getElementById('userContent').style.display = 'none';
+            document.getElementById('loginPhone').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginPhoneError').classList.remove('show');
+            document.getElementById('loginPasswordError').classList.remove('show');
+        }
+
+        function renderUserBookings() {
+            const listContainer = document.getElementById('userBookingsList');
+            const userBookings = bookings.filter(b => b.phone === userPhone);
+            const now = new Date();
+
+            if (userBookings.length === 0) {
+                listContainer.innerHTML = '<div class="empty-message">אין תורים שלך</div>';
+                return;
+            }
+
+            const sorted = [...userBookings].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            listContainer.innerHTML = sorted.map(booking => {
+                const bookingDate = new Date(booking.date + 'T00:00:00');
+                const isPastBooking = bookingDate < now;
+
+                return `
+                    <div class="booking-card ${isPastBooking ? 'past' : ''}">
+                        <div class="booking-card-header">👶 ${booking.name}</div>
+                        <div class="booking-card-info">
+                            🆔 ${booking.patientId}<br>
+                            📱 ${booking.phone}<br>
+                            🏥 ${booking.insurance}<br>
+                            📅 ${booking.date} בשעה ${booking.time}
+                        </div>
+                        <div class="booking-card-actions">
+                            <button class="btn btn-delete" onclick="deleteUserBooking(${booking.id})">🗑️ ביטול</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteUserBooking(id) {
+            if (confirm('האם אתה בטוח שברצונך לבטל את התור?')) {
+                bookings = bookings.filter(b => b.id !== id);
+                localStorage.setItem('clinicBookings', JSON.stringify(bookings));
+                renderUserBookings();
+                updateStats();
+                alert('✓ התור בוטל בהצלחה');
+            }
         }
 
         function getDaysInMonth(date) {
@@ -818,6 +1016,7 @@
         function clearErrors() {
             document.getElementById('nameError').classList.remove('show');
             document.getElementById('idError').classList.remove('show');
+            document.getElementById('phoneError').classList.remove('show');
             document.getElementById('insuranceError').classList.remove('show');
         }
 
@@ -825,6 +1024,7 @@
             clearErrors();
             const name = document.getElementById('patientName').value.trim();
             const id = document.getElementById('patientId').value.trim();
+            const phone = document.getElementById('patientPhone').value.trim();
             const insurance = document.getElementById('insurance').value;
 
             let isValid = true;
@@ -835,6 +1035,10 @@
             }
             if (id.length !== 9 || !/^\d{9}$/.test(id)) {
                 document.getElementById('idError').classList.add('show');
+                isValid = false;
+            }
+            if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
+                document.getElementById('phoneError').classList.add('show');
                 isValid = false;
             }
             if (!insurance) {
@@ -873,10 +1077,12 @@
             const dateStr = `${dayName}, ${selectedDate.getDate()}`;
             const name = document.getElementById('patientName').value;
             const id = document.getElementById('patientId').value;
+            const phone = document.getElementById('patientPhone').value;
             const insurance = document.getElementById('insurance').options[document.getElementById('insurance').selectedIndex].text;
 
             document.getElementById('selectedPatientName').innerHTML = `👶 <strong>${name}</strong>`;
             document.getElementById('selectedPatientId').innerHTML = `🆔 <strong>${id}</strong>`;
+            document.getElementById('selectedPatientPhone').innerHTML = `📱 <strong>${phone}</strong>`;
             document.getElementById('selectedInsurance').innerHTML = `🏥 <strong>${insurance}</strong>`;
             document.getElementById('selectedDate').innerHTML = `📅 <strong>${dateStr}</strong>`;
             document.getElementById('selectedTime').innerHTML = `🕐 <strong>${selectedTime}</strong>`;
@@ -888,6 +1094,7 @@
                 id: Date.now(),
                 name: document.getElementById('patientName').value,
                 patientId: document.getElementById('patientId').value,
+                phone: document.getElementById('patientPhone').value,
                 insurance: document.getElementById('insurance').options[document.getElementById('insurance').selectedIndex].text,
                 date: selectedDate.toISOString().split('T')[0],
                 time: selectedTime,
@@ -897,7 +1104,7 @@
             bookings.push(booking);
             localStorage.setItem('clinicBookings', JSON.stringify(bookings));
 
-            alert(`✅ התור אושר!\n\n${booking.name}\n${booking.date} בשעה ${booking.time}\n\nברכים על ההזמנה!`);
+            alert(`✅ התור אושר!\n\n${booking.name}\n${booking.date} בשעה ${booking.time}\n\nסיסמתך לאזור האישי: 1111\nטלפון: ${booking.phone}`);
             resetSelection();
             updateStats();
         }
@@ -907,6 +1114,7 @@
             selectedTime = null;
             document.getElementById('patientName').value = '';
             document.getElementById('patientId').value = '';
+            document.getElementById('patientPhone').value = '';
             document.getElementById('insurance').value = '';
             clearErrors();
             document.getElementById('slotsContainer').classList.remove('active');
@@ -945,6 +1153,7 @@
                         <div class="booking-card-header">👶 ${booking.name}</div>
                         <div class="booking-card-info">
                             🆔 ${booking.patientId}<br>
+                            📱 ${booking.phone}<br>
                             🏥 ${booking.insurance}<br>
                             📅 ${booking.date} בשעה ${booking.time}
                         </div>
