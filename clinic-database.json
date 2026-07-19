@@ -1,0 +1,39 @@
+{
+  "clinic": {
+    "name": "מרפאת ילדים - ליברמת אפעל",
+    "phone": "03-XXXXXXX",
+    "hours": {
+      "start": "08:00",
+      "end": "18:00",
+      "slotDuration": 10
+    },
+    "slotsPerDay": 60
+  },
+  "bookings": [
+    {
+      "id": 1,
+      "name": "דוגמא - אביחי כהן",
+      "patientId": "123456789",
+      "insurance": "קופת חולים כללית",
+      "date": "2026-08-15",
+      "time": "09:00",
+      "confirmed": "2026-07-19T20:50:00.000Z",
+      "status": "confirmed"
+    },
+    {
+      "id": 2,
+      "name": "דוגמא - שירה לוי",
+      "patientId": "987654321",
+      "insurance": "מכבי",
+      "date": "2026-08-15",
+      "time": "09:10",
+      "confirmed": "2026-07-19T20:50:30.000Z",
+      "status": "confirmed"
+    }
+  ],
+  "backup": {
+    "lastExport": "2026-07-19T20:50:00.000Z",
+    "totalBookingsEver": 2,
+    "notes": "עשה גיבוי של קובץ זה לעתים קרובות"
+  }
+}
