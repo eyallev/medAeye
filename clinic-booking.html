@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#4CAF50">
-    <title>תור מרפאת ילדים - ליברמת אפעל</title>
+    <meta name="theme-color" content="#FF6B9D">
+    <title>טיפי - מרפאת ילדים ליברמת אפעל</title>
     <style>
         * {
             margin: 0;
@@ -16,8 +16,8 @@
 
         html, body {
             height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FFE5EC 0%, #E1BEE7 50%, #C5E1A5 100%);
             color: #333;
             display: flex;
             align-items: center;
@@ -27,39 +27,68 @@
 
         .container {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.2);
+            max-width: 520px;
             width: 100%;
-            padding: 20px;
+            padding: 24px;
             max-height: 90vh;
             overflow-y: auto;
+            border: 4px solid #FF6B9D;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
+            padding: 20px;
+            border-radius: 16px;
+            color: white;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .emoji-header {
+            font-size: 40px;
+            margin-bottom: 10px;
         }
 
         .tabs {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 10px;
+            border-bottom: 3px solid #FFE5EC;
+            padding-bottom: 12px;
         }
 
         .tab-button {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             background: transparent;
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
             color: #999;
-            border-bottom: 3px solid transparent;
+            border-bottom: 4px solid transparent;
             transition: all 0.3s;
+            border-radius: 8px 8px 0 0;
         }
 
         .tab-button.active {
-            color: #4CAF50;
-            border-bottom-color: #4CAF50;
+            color: #FF6B9D;
+            border-bottom-color: #FF6B9D;
+            background: #FFE5EC;
         }
 
         .tab-content {
@@ -70,48 +99,78 @@
             display: block;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 3px solid #4CAF50;
-            padding-bottom: 15px;
+        .form-group {
+            margin-bottom: 16px;
         }
 
-        h1 {
-            font-size: 24px;
-            color: #4CAF50;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            color: #666;
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #FF6B9D;
             font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #FFE5EC;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: #FFF9FB;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #FF6B9D;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        input::placeholder {
+            color: #FFB3D9;
+        }
+
+        .error {
+            color: #FF5252;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .error.show {
+            display: block;
         }
 
         .month-selector {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             gap: 10px;
         }
 
         .month-selector button {
-            background: #f0f0f0;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
             border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
-            transition: background 0.3s;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
         }
 
         .month-selector button:active {
-            background: #e0e0e0;
+            transform: scale(0.95);
         }
 
         .month-selector button:disabled {
-            opacity: 0.5;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
@@ -120,20 +179,20 @@
             text-align: center;
             font-weight: bold;
             font-size: 18px;
-            color: #333;
+            color: #FF6B9D;
         }
 
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-bottom: 20px;
+            gap: 6px;
+            margin-bottom: 16px;
         }
 
         .day-header {
             text-align: center;
             font-weight: bold;
-            color: #666;
+            color: #FF85C0;
             font-size: 12px;
             padding: 8px 0;
         }
@@ -143,83 +202,58 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 14px;
+            font-weight: bold;
             transition: all 0.3s;
             border: 2px solid transparent;
-            background: #f9f9f9;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE5EC 100%);
             position: relative;
         }
 
         .day.other-month {
-            color: #ccc;
+            color: #ddd;
             cursor: default;
         }
 
         .day.past {
-            background: #e0e0e0;
+            background: #E0E0E0;
             color: #999;
             cursor: default;
         }
 
         .day.available {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-color: #4CAF50;
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #558B2F;
+            border-color: #7CB342;
         }
 
         .day.available:active {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #9CCC65 0%, #7CB342 100%);
             color: white;
         }
 
         .day.selected {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
             color: white;
             font-weight: bold;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
         }
 
         .day.selected::after {
             content: '✓';
             position: absolute;
             top: 2px;
-            right: 2px;
+            right: 4px;
             font-size: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-            font-size: 14px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #4CAF50;
         }
 
         .slots-container {
             display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 3px solid #FFE5EC;
         }
 
         .slots-container.active {
@@ -229,53 +263,58 @@
         .slots-title {
             font-weight: bold;
             margin-bottom: 12px;
-            color: #333;
+            color: #FF6B9D;
             text-align: center;
+            font-size: 15px;
         }
 
         .time-slots {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .time-slot {
-            padding: 12px;
-            border: 2px solid #4CAF50;
-            border-radius: 8px;
+            padding: 10px;
+            border: 2px solid #FFB3D9;
+            border-radius: 10px;
             text-align: center;
             cursor: pointer;
             background: white;
             transition: all 0.3s;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13px;
+            font-weight: bold;
+            color: #FF6B9D;
         }
 
         .time-slot:active {
-            background: #4CAF50;
+            background: #FF6B9D;
             color: white;
+            transform: scale(0.95);
         }
 
         .time-slot.selected {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
         }
 
         .time-slot.booked {
-            background: #ffebee;
-            border-color: #f44336;
-            color: #f44336;
+            background: #FFEBEE;
+            border-color: #FF5252;
+            color: #FF5252;
             cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .confirmation {
             display: none;
-            background: #f0f8f0;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #E1BEE7 0%, #F8BBD0 100%);
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 6px solid #FF6B9D;
+            margin-bottom: 16px;
         }
 
         .confirmation.active {
@@ -284,18 +323,20 @@
 
         .confirmation-text {
             font-size: 14px;
-            color: #2e7d32;
+            color: #FF6B9D;
             margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .booking-details {
-            background: #fff;
+            background: white;
             padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
             font-weight: 500;
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.8;
+            color: #333;
         }
 
         .button-group {
@@ -305,10 +346,10 @@
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
@@ -316,42 +357,42 @@
         }
 
         .btn-confirm {
-            background: #4CAF50;
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
             color: white;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
         }
 
         .btn-confirm:active {
-            background: #388e3c;
-            transform: scale(0.98);
+            transform: scale(0.95);
         }
 
         .btn-reset {
-            background: #f0f0f0;
-            color: #333;
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #558B2F;
         }
 
         .btn-reset:active {
-            background: #e0e0e0;
-            transform: scale(0.98);
+            transform: scale(0.95);
         }
 
         .btn-delete {
-            background: #f44336;
+            background: #FF5252;
             color: white;
             font-size: 12px;
             padding: 6px 12px;
         }
 
         .btn-delete:active {
-            background: #d32f2f;
+            transform: scale(0.95);
         }
 
         .info-text {
             text-align: center;
-            color: #666;
+            color: #FF85C0;
             font-size: 12px;
-            margin-top: 15px;
+            margin-top: 12px;
             line-height: 1.4;
+            font-weight: 500;
         }
 
         .bookings-list {
@@ -361,12 +402,13 @@
         }
 
         .booking-card {
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE5EC 100%);
             padding: 12px;
-            border-radius: 8px;
-            border-right: 4px solid #4CAF50;
+            border-radius: 12px;
+            border-right: 5px solid #FF6B9D;
             font-size: 13px;
             line-height: 1.6;
+            box-shadow: 0 2px 8px rgba(255, 107, 157, 0.15);
         }
 
         .booking-card.past {
@@ -376,13 +418,15 @@
 
         .booking-card-header {
             font-weight: bold;
-            margin-bottom: 6px;
-            color: #333;
+            margin-bottom: 8px;
+            color: #FF6B9D;
+            font-size: 14px;
         }
 
         .booking-card-info {
             color: #666;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
+            line-height: 1.8;
         }
 
         .booking-card-actions {
@@ -392,35 +436,73 @@
 
         .empty-message {
             text-align: center;
-            color: #999;
-            padding: 20px;
+            color: #FFB3D9;
+            padding: 30px;
             font-size: 14px;
+            font-weight: 500;
         }
 
         .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
 
         .stat-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FF6B9D 0%, #FF85C0 100%);
             color: white;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 16px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
         }
 
         .stat-number {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .stat-label {
             font-size: 12px;
             opacity: 0.9;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #FF6B9D;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .lock-icon {
+            color: #FF6B9D;
+            margin-right: 8px;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #C5E1A5 0%, #AED581 100%);
+            color: #558B2F;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-weight: bold;
+            font-size: 13px;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
         }
 
         @supports (padding: max(0px)) {
@@ -435,29 +517,32 @@
 <body>
     <div class="container">
         <header>
-            <h1>🏥 מרפאת ילדים</h1>
-            <p class="subtitle">ליברמת אפעל - זימון תור</p>
+            <div class="emoji-header">🧒👨‍⚕️</div>
+            <h1>טִיפִי</h1>
+            <p class="subtitle">מרפאת ילדים ליברמת אפעל</p>
         </header>
 
         <div class="tabs">
-            <button class="tab-button active" onclick="switchTab('booking')">זימון תור</button>
-            <button class="tab-button" onclick="switchTab('bookings')">ניהול תורים</button>
+            <button class="tab-button active" onclick="switchTab('booking')">🗓️ זימון</button>
+            <button class="tab-button" onclick="switchTab('bookings')">🔐 ניהול</button>
         </div>
 
         <!-- TAB 1: BOOKING -->
         <div id="booking" class="tab-content active">
             <div class="form-group">
-                <label>שם המטופל *</label>
-                <input type="text" id="patientName" placeholder="הכנס שם מלא">
+                <label>👶 שם המטופל *</label>
+                <input type="text" id="patientName" placeholder="הכנס שם מלא" maxlength="50">
+                <div class="error" id="nameError">שם חובה</div>
             </div>
 
             <div class="form-group">
-                <label>תעודת זהות *</label>
-                <input type="text" id="patientId" placeholder="הכנס ת.ז">
+                <label>🆔 תעודת זהות *</label>
+                <input type="text" id="patientId" placeholder="הכנס 9 ספרות" maxlength="9" inputmode="numeric">
+                <div class="error" id="idError">ת.ז חייבת להיות 9 ספרות</div>
             </div>
 
             <div class="form-group">
-                <label>קופת חולים *</label>
+                <label>🏥 קופת חולים *</label>
                 <select id="insurance">
                     <option value="">בחר קופת חולים</option>
                     <option value="clalit">קופת חולים כללית</option>
@@ -466,6 +551,7 @@
                     <option value="leumit">לאומית</option>
                     <option value="private">פרטית</option>
                 </select>
+                <div class="error" id="insuranceError">קופה חובה</div>
             </div>
 
             <div class="month-selector">
@@ -477,11 +563,11 @@
             <div class="calendar" id="calendar"></div>
 
             <div class="slots-container" id="slotsContainer">
-                <div class="slots-title">בחר שעה (10 דקות)</div>
+                <div class="slots-title">⏰ בחר שעה זמינה</div>
                 <div class="time-slots" id="timeSlots"></div>
                 
                 <div class="confirmation" id="confirmation">
-                    <div class="confirmation-text">✓ התור שלך</div>
+                    <div class="confirmation-text">✅ סיכום התור</div>
                     <div class="booking-details">
                         <div id="selectedPatientName"></div>
                         <div id="selectedPatientId"></div>
@@ -490,38 +576,50 @@
                         <div id="selectedTime"></div>
                     </div>
                     <div class="button-group">
-                        <button class="btn btn-confirm" onclick="confirmBooking()">אישור התור</button>
-                        <button class="btn btn-reset" onclick="resetSelection()">בחר מחדש</button>
+                        <button class="btn btn-confirm" onclick="confirmBooking()">✓ אישור</button>
+                        <button class="btn btn-reset" onclick="resetSelection()">↺ בחר מחדש</button>
                     </div>
                 </div>
             </div>
 
             <div class="info-text">
-                ⏰ שעות פעילות: 08:00 - 18:00<br>
-                📞 לביטול תור: התקשרו אלינו
+                ⏰ שעות: 08:00 - 18:00 | ⏱️ כל תור: 10 דקות
             </div>
         </div>
 
         <!-- TAB 2: BOOKINGS MANAGEMENT -->
         <div id="bookings" class="tab-content">
-            <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-number" id="totalBookings">0</div>
-                    <div class="stat-label">סך תורים</div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label><span class="lock-icon">🔐</span>סיסמת ניהול *</label>
+                <div class="password-field">
+                    <input type="password" id="adminPassword" placeholder="הכנס סיסמה">
+                    <button class="toggle-password" onclick="togglePasswordVisibility()">👁️</button>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-number" id="availableSlots">60</div>
-                    <div class="stat-label">זמנים פנויים</div>
-                </div>
+                <div class="error" id="passwordError">סיסמה שגויה</div>
             </div>
 
-            <div class="bookings-list" id="bookingsList">
-                <div class="empty-message">אין תורים עדיין</div>
-            </div>
+            <div id="adminContent" style="display: none;">
+                <div class="success-message" id="successMessage">✓ התור אושר בהצלחה!</div>
 
-            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e0e0e0;">
-                <button class="btn btn-reset" onclick="exportData()" style="width: 100%; margin-bottom: 10px;">📥 ייצוא נתונים (JSON)</button>
-                <button class="btn btn-reset" onclick="clearAllData()" style="width: 100%; background: #ffebee; color: #f44336;">🗑️ מחק הכל</button>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div class="stat-number" id="totalBookings">0</div>
+                        <div class="stat-label">סך תורים</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number" id="availableSlots">60</div>
+                        <div class="stat-label">זמנים פנויים</div>
+                    </div>
+                </div>
+
+                <div class="bookings-list" id="bookingsList">
+                    <div class="empty-message">אין תורים עדיין</div>
+                </div>
+
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 3px solid #FFE5EC;">
+                    <button class="btn btn-reset" onclick="exportData()" style="width: 100%; margin-bottom: 10px;">📥 ייצוא</button>
+                    <button class="btn btn-reset" onclick="clearAllData()" style="width: 100%; background: #FFEBEE; color: #FF5252;">🗑️ מחק הכל</button>
+                </div>
             </div>
         </div>
     </div>
@@ -533,34 +631,77 @@
             slotDuration: 10
         };
 
+        const ADMIN_PASSWORD = '5588';
         let currentDate = new Date();
         let selectedDate = null;
         let selectedTime = null;
         let bookings = JSON.parse(localStorage.getItem('clinicBookings') || '[]');
+        let adminAuthenticated = false;
 
         // Initialize
         function init() {
             renderCalendar();
             renderTimeSlots();
             updateStats();
+            
+            // Validate ID input
+            document.getElementById('patientId').addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            // Admin password verification
+            document.getElementById('adminPassword').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    checkAdminPassword();
+                }
+            });
         }
 
         function switchTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show selected tab
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
 
             if (tabName === 'bookings') {
-                renderBookingsList();
+                document.getElementById('adminPassword').focus();
+                clearAdminView();
             }
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const passwordError = document.getElementById('passwordError');
+
+            if (password === ADMIN_PASSWORD) {
+                adminAuthenticated = true;
+                passwordError.classList.remove('show');
+                document.getElementById('adminContent').style.display = 'block';
+                document.getElementById('adminPassword').style.display = 'none';
+                renderBookingsList();
+                updateStats();
+            } else {
+                adminAuthenticated = false;
+                passwordError.classList.add('show');
+                document.getElementById('adminContent').style.display = 'none';
+            }
+        }
+
+        function clearAdminView() {
+            if (adminAuthenticated) {
+                renderBookingsList();
+            } else {
+                document.getElementById('adminContent').style.display = 'none';
+                document.getElementById('adminPassword').style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('passwordError').classList.remove('show');
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const pwd = document.getElementById('adminPassword');
+            pwd.type = pwd.type === 'password' ? 'text' : 'password';
         }
 
         function getDaysInMonth(date) {
@@ -572,10 +713,8 @@
         }
 
         function formatHebrewMonth(date) {
-            const months = [
-                'ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
-                'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'
-            ];
+            const months = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני',
+                          'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
             return `${months[date.getMonth()]} ${date.getFullYear()}`;
         }
 
@@ -590,6 +729,10 @@
             return bookings.some(b => b.date === dateStr && b.time === time);
         }
 
+        function patientHasBooking(patientId) {
+            return bookings.some(b => b.patientId === patientId);
+        }
+
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -602,7 +745,6 @@
             const calendar = document.getElementById('calendar');
             calendar.innerHTML = '';
 
-            // Day headers
             const dayHeaders = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
             dayHeaders.forEach(day => {
                 const dayHeader = document.createElement('div');
@@ -611,14 +753,12 @@
                 calendar.appendChild(dayHeader);
             });
 
-            // Empty cells
             for (let i = 0; i < firstDay; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.className = 'day other-month';
                 calendar.appendChild(emptyDay);
             }
 
-            // Day cells
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateObj = new Date(year, month, day);
                 const dayElement = document.createElement('div');
@@ -675,24 +815,38 @@
             });
         }
 
+        function clearErrors() {
+            document.getElementById('nameError').classList.remove('show');
+            document.getElementById('idError').classList.remove('show');
+            document.getElementById('insuranceError').classList.remove('show');
+        }
+
         function validateForm() {
+            clearErrors();
             const name = document.getElementById('patientName').value.trim();
             const id = document.getElementById('patientId').value.trim();
             const insurance = document.getElementById('insurance').value;
 
+            let isValid = true;
+
             if (!name) {
-                alert('אנא הכנס שם מטופל');
-                return false;
+                document.getElementById('nameError').classList.add('show');
+                isValid = false;
             }
-            if (!id) {
-                alert('אנא הכנס תעודת זהות');
-                return false;
+            if (id.length !== 9 || !/^\d{9}$/.test(id)) {
+                document.getElementById('idError').classList.add('show');
+                isValid = false;
             }
             if (!insurance) {
-                alert('אנא בחר קופת חולים');
-                return false;
+                document.getElementById('insuranceError').classList.add('show');
+                isValid = false;
             }
-            return true;
+            if (patientHasBooking(id)) {
+                alert('⚠️ לת.ז זו יש כבר תור זימון!');
+                isValid = false;
+            }
+
+            return isValid;
         }
 
         function selectDate(dateObj) {
@@ -721,7 +875,7 @@
             const id = document.getElementById('patientId').value;
             const insurance = document.getElementById('insurance').options[document.getElementById('insurance').selectedIndex].text;
 
-            document.getElementById('selectedPatientName').innerHTML = `👤 <strong>${name}</strong>`;
+            document.getElementById('selectedPatientName').innerHTML = `👶 <strong>${name}</strong>`;
             document.getElementById('selectedPatientId').innerHTML = `🆔 <strong>${id}</strong>`;
             document.getElementById('selectedInsurance').innerHTML = `🏥 <strong>${insurance}</strong>`;
             document.getElementById('selectedDate').innerHTML = `📅 <strong>${dateStr}</strong>`;
@@ -743,7 +897,7 @@
             bookings.push(booking);
             localStorage.setItem('clinicBookings', JSON.stringify(bookings));
 
-            alert(`✓ התור אושר!\n\n${booking.name}\n${booking.date} בשעה ${booking.time}`);
+            alert(`✅ התור אושר!\n\n${booking.name}\n${booking.date} בשעה ${booking.time}\n\nברכים על ההזמנה!`);
             resetSelection();
             updateStats();
         }
@@ -754,6 +908,7 @@
             document.getElementById('patientName').value = '';
             document.getElementById('patientId').value = '';
             document.getElementById('insurance').value = '';
+            clearErrors();
             document.getElementById('slotsContainer').classList.remove('active');
             document.getElementById('confirmation').classList.remove('active');
             renderCalendar();
@@ -779,7 +934,6 @@
                 return;
             }
 
-            // Sort by date
             const sorted = [...bookings].sort((a, b) => new Date(a.date) - new Date(b.date));
 
             listContainer.innerHTML = sorted.map(booking => {
@@ -788,14 +942,14 @@
 
                 return `
                     <div class="booking-card ${isPastBooking ? 'past' : ''}">
-                        <div class="booking-card-header">${booking.name}</div>
+                        <div class="booking-card-header">👶 ${booking.name}</div>
                         <div class="booking-card-info">
                             🆔 ${booking.patientId}<br>
                             🏥 ${booking.insurance}<br>
                             📅 ${booking.date} בשעה ${booking.time}
                         </div>
                         <div class="booking-card-actions">
-                            <button class="btn btn-delete" onclick="deleteBooking(${booking.id})">מחק</button>
+                            <button class="btn btn-delete" onclick="deleteBooking(${booking.id})">🗑️ מחק</button>
                         </div>
                     </div>
                 `;
@@ -814,7 +968,7 @@
         function updateStats() {
             const totalBookings = bookings.length;
             const slotsPerDay = generateTimeSlots().length;
-            const daysToCount = 30; // Count for next 30 days
+            const daysToCount = 30;
             const bookedSlots = bookings.length;
             const availableSlots = (slotsPerDay * daysToCount) - bookedSlots;
 
@@ -850,7 +1004,6 @@
             }
         }
 
-        // Initialize on load
         window.addEventListener('load', init);
     </script>
 </body>
